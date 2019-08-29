@@ -4,10 +4,6 @@
  * Wochentagsberechnung nach https://de.wikipedia.org/wiki/Wochentagsberechnung
  */
 
-/**
- * @param int $w
- * @return mixed
- */
 function getWeekdayName(int $w)
 {
     $weekDayNames = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
@@ -41,16 +37,7 @@ function main(int $argc, array $argv): void
 
     list($day, $month, $year) = handleCommandLine($argc, $argv);
 
-    $m = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
-    if ($m >= 11) {
-        $c = substr($year - 1, 0, 2);
-        $y = substr($year - 1, 2, 2);
-    } else {
-        $c = substr($year, 0, 2);
-        $y = substr($year, 2, 2);
-    }
-
-    $weekdayNumber = ($day + intval(2.6 * $m - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
+    list($julianMonth, $c, $y, $weekdayNumber) = calculateWeekdayNumber($month, $year, $day);
 
     $weekday = getWeekdayName($weekdayNumber);
 
@@ -58,14 +45,24 @@ function main(int $argc, array $argv): void
 
     printAusgabe($weekday);
 
-    printDebugOutput($m, $y, $c);
+    printDebugOutput($julianMonth, $y, $c);
 }
 
-/**
- * @param int $argc
- * @param array $argv
- * @return array
- */
+function calculateWeekdayNumber($month, $year, $day): array
+{
+    $julianMonth = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
+    if ($julianMonth >= 11) {
+        $c = substr($year - 1, 0, 2);
+        $y = substr($year - 1, 2, 2);
+    } else {
+        $c = substr($year, 0, 2);
+        $y = substr($year, 2, 2);
+    }
+
+    $weekdayNumber = ($day + intval(2.6 * $julianMonth - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
+    return array($julianMonth, $c, $y, $weekdayNumber);
+}
+
 function handleCommandLine(int $argc, array $argv): array
 {
     $day = $argv[1];
