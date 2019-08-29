@@ -16,7 +16,7 @@ if($argc<4 || $argc>5) {
 }
 
 $d = $day;
-$m = 0;
+/*$m = 0;*/
 $m = (($month - 2 - 1 ) + 12 ) % 12 + 1 ; // this is because of the modulo
 $c = substr($year, 0, 2);
 if($m>=11) {
