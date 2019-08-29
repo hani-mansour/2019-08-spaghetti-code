@@ -26,8 +26,18 @@ if($m>=11) {
 }
 
 $w = ($day + intval (2.6 * $m - 0.2) + $y  + intval ($y/4) + intval ($c/4) - 2*$c ) % 7;
-$weekDayNames=["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"];
-$weekday=$weekDayNames[$w];
+/**
+ * @param int $w
+ * @return mixed
+ */
+function getWeekdayName(int $w)
+{
+    $weekDayNames = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+    $weekday = $weekDayNames[$w];
+    return $weekday;
+}
+
+$weekday = getWeekdayName($w);
 
 /*if($w == 1) {
     $weekday = "Montag";
